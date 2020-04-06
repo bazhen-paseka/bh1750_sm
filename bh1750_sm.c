@@ -67,24 +67,25 @@
 **************************************************************************
 */
 
-void BH1750_Init(void) {
-	#define SOFT_VERSION 123
-	int soft_version_arr_int[3];
-	soft_version_arr_int[0] = ((SOFT_VERSION) / 100) %10 ;
-	soft_version_arr_int[1] = ((SOFT_VERSION) /  10) %10 ;
-	soft_version_arr_int[2] = ((SOFT_VERSION)      ) %10 ;
-
-	char DataChar[100];
-	sprintf(DataChar,"\r\n\tbh1750 2020-April-06 v%d.%d.%d \r\n\tUART1 for debug on speed 115200/8-N-1\r\n\r\n",
-			soft_version_arr_int[0], soft_version_arr_int[1], soft_version_arr_int[2]);
-	HAL_UART_Transmit(&huart1, (uint8_t *)DataChar, strlen(DataChar), 100);
-
+HAL_StatusTypeDef BH1750_Init(bh1750_struct * _h_bh1750 ) {
+	//	SET_BH1750 = 0x10; Set mode for BH1750:
+		//	Continuously H-Resolution Mode 0001_0000
+		//	Start measurement at 1lx resolution.
+		//	Measurement Time is typically 120ms.
+	HAL_StatusTypeDef res = HAL_ERROR;
+	uint8_t SET_BH1750   = 0x10 ;
+	if (HAL_I2C_IsDeviceReady( _h_bh1750->i2c, _h_bh1750->device_i2c_address<<1, 10, 100)== HAL_OK)	{
+		res = HAL_I2C_Master_Transmit( _h_bh1750->i2c, _h_bh1750->device_i2c_address<<1, &SET_BH1750, 1,100);
+	}
+	return res;
 }
 //************************************************************************
 
-void BH1750_Main(void) {
-	  HAL_GPIO_TogglePin(LED_BOARD_GPIO_Port,LED_BOARD_Pin);
-	  HAL_Delay(1100);
+uint16_t BH1750_Main( bh1750_struct * _h_bh1750) {
+	uint8_t  lux_buffer_u8[2]  ;
+	HAL_I2C_Master_Receive(_h_bh1750->i2c, _h_bh1750->device_i2c_address<<1, (uint8_t *)&lux_buffer_u8, 2, 10);
+	uint16_t lux_result_u16  = (lux_buffer_u8[0]<<8) + lux_buffer_u8[1] ;
+	return lux_result_u16;
 }
 //-------------------------------------------------------------------------------------------------
 
