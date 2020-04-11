@@ -83,8 +83,8 @@ HAL_StatusTypeDef BH1750_Init(bh1750_struct * _h_bh1750 ) {
 
 uint16_t BH1750_Main( bh1750_struct * _h_bh1750) {
 	uint8_t  lux_buffer_u8[2]  ;
-	HAL_I2C_Master_Receive(_h_bh1750->i2c, _h_bh1750->device_i2c_address<<1, (uint8_t *)&lux_buffer_u8, 2, 10);
-	uint16_t lux_result_u16  = (lux_buffer_u8[0]<<8) + lux_buffer_u8[1] ;
+	HAL_I2C_Master_Receive(_h_bh1750->i2c, _h_bh1750->device_i2c_address<<1, lux_buffer_u8, 2, 10);
+	uint16_t lux_result_u16  = ((uint16_t)lux_buffer_u8[0]<<8) + lux_buffer_u8[1] ;
 	return lux_result_u16;
 }
 //-------------------------------------------------------------------------------------------------
