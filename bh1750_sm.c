@@ -67,28 +67,38 @@
 **************************************************************************
 */
 
-HAL_StatusTypeDef BH1750_Init(bh1750_struct * _h_bh1750 ) {
-	//	SET_BH1750 = 0x10; Set mode for BH1750:
-		//	Continuously H-Resolution Mode 0001_0000
-		//	Start measurement at 1lx resolution.
-		//	Measurement Time is typically 120ms.
-	HAL_StatusTypeDef res = HAL_ERROR;
-	uint8_t SET_BH1750   = 0x10 ;
+HAL_StatusTypeDef BH1750_init(bh1750_struct * _h_bh1750, bh1750_instruction_enum _instruct) {
+	HAL_StatusTypeDef	op_res_td = HAL_OK;
+
+	bh1750_instruction_enum 	bh1750_instruction	= bh1750_power_on;
 	if (HAL_I2C_IsDeviceReady( _h_bh1750->i2c, _h_bh1750->device_i2c_address, 10, 100)== HAL_OK)	{
-		res = HAL_I2C_Master_Transmit( _h_bh1750->i2c, _h_bh1750->device_i2c_address, &SET_BH1750, 1,100);
+		op_res_td = op_res_td + HAL_I2C_Master_Transmit( _h_bh1750->i2c, _h_bh1750->device_i2c_address, &bh1750_instruction, 1,100);
 	}
-	return res;
+
+	if (HAL_I2C_IsDeviceReady( _h_bh1750->i2c, _h_bh1750->device_i2c_address, 10, 100)== HAL_OK)	{
+		op_res_td = op_res_td + HAL_I2C_Master_Transmit( _h_bh1750->i2c, _h_bh1750->device_i2c_address, &_instruct, 1,100);
+	}
+	return op_res_td;
 }
 //************************************************************************
 
-uint16_t BH1750_Main( bh1750_struct * _h_bh1750) {
-	uint8_t  lux_buffer_u8[2]  ;
-	HAL_I2C_Master_Receive(_h_bh1750->i2c, _h_bh1750->device_i2c_address, lux_buffer_u8, 2, 10);
-	uint16_t lux_result_u16  = ((uint16_t)lux_buffer_u8[0]<<8) + lux_buffer_u8[1] ;
-	return lux_result_u16;
+HAL_StatusTypeDef BH1750_get_lux (bh1750_struct *_h_bh1750, bh1750_instruction_enum _instruct, uint16_t *_result_lux_u16) {
+	HAL_StatusTypeDef	op_res_td = HAL_OK;
+	uint8_t				lux_buffer_u8[2]  ;
+
+	if (HAL_I2C_IsDeviceReady( _h_bh1750->i2c, _h_bh1750->device_i2c_address, 10, 100)== HAL_OK)	{
+		op_res_td = op_res_td + HAL_I2C_Master_Transmit( _h_bh1750->i2c, _h_bh1750->device_i2c_address, &_instruct, 1,100);
+	}
+
+	if (HAL_I2C_IsDeviceReady( _h_bh1750->i2c, _h_bh1750->device_i2c_address, 10, 100)== HAL_OK)	{
+		op_res_td = op_res_td + HAL_I2C_Master_Receive(_h_bh1750->i2c, _h_bh1750->device_i2c_address, lux_buffer_u8, 2, 10);
+	}
+
+	*_result_lux_u16  = ((uint16_t)lux_buffer_u8[0]<<8) + lux_buffer_u8[1] ;
+
+	return op_res_td;
 }
 //-------------------------------------------------------------------------------------------------
-
 
 //************************************************************************
 
