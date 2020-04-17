@@ -87,19 +87,30 @@ typedef enum
 
 
 //	EXAMPLE
-//
-//	bh1750_struct h1_bh1750 =
-//	{
+//	bh1750_struct h1_bh1750 = {
 //		.i2c = &hi2c1,
 //		.device_i2c_address = BH1750_I2C_ADDR
 //	};
-//	//----------------------------------------------------------
-//
-//
-//	HAL_StatusTypeDef res = BH1750_Init( &h1_bh1750 );
-//	sprintf(DataChar,"\r\n\tBH1750 init status: %d;\r\n", (int)res);
-//	HAL_UART_Transmit(&huart1, (uint8_t *)DataChar, strlen(DataChar), 100);
-//
-//	uint16_t lux_u16 = BH1750_Main( &h1_bh1750 );
-//	sprintf(DataChar,"lux: %d; \r\n", (int)lux_u16);
-//	HAL_UART_Transmit(&huart1, (uint8_t *)DataChar, strlen(DataChar), 100);
+
+//	HAL_StatusTypeDef op_res_td = BH1750_init( &h1_bh1750, bh1750_one_time_h_resolutione );
+
+//	uint16_t lux_u16 = 0 ;
+//	HAL_StatusTypeDef op_res_td = BH1750_get_lux( &h1_bh1750, bh1750_one_time_h_resolutione, &lux_u16);
+
+
+
+/*
+ * bh1750_local_config.h
+ *
+ *  Created on: 14-April-2020
+ *      Author: Bazhen Levkovets
+ */
+//	#ifndef LOCAL_CONFIG_BH1750_LOCAL_CONFIG_H_
+//	#define LOCAL_CONFIG_BH1750_LOCAL_CONFIG_H_
+/*
+**************************************************************************
+*								    DEFINES
+**************************************************************************
+*/
+//	#define BH1750_I2C_ADDR		0x23<<1
+//	#endif /* LOCAL_CONFIG_BH1750_LOCAL_CONFIG_H_ */
