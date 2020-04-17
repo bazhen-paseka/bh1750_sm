@@ -38,6 +38,19 @@
 **************************************************************************
 */
 
+typedef enum
+{
+	bh1750_power_down					=	0b00000000	,
+	bh1750_power_on						=	0b00000001	,
+	bh1750_power_reset					=	0b00000111	,
+	bh1750_continuously_h_resolution	=	0b00010000	,
+	bh1750_continuously_h2_resolution	=	0b00010001	,
+	bh1750_continuously_l_resolution	=	0b00010011	,
+	bh1750_one_time_h_resolutione		=	0b00100000	,
+	bh1750_one_time_h2_resolutione		=	0b00100001	,
+	bh1750_one_time_l_resolutione		=	0b00100011	,
+}	bh1750_instruction_enum;
+
 /*
 **************************************************************************
 *								   DATA TYPES
@@ -67,8 +80,8 @@
 *                              FUNCTION PROTOTYPES
 **************************************************************************
 */
-	HAL_StatusTypeDef	BH1750_Init	( bh1750_struct * _h_bh1750 )		;
-	uint16_t 			BH1750_Main	( bh1750_struct * _h_bh1750 )	 	;
+	HAL_StatusTypeDef	BH1750_init		( bh1750_struct * _h_bh1750, bh1750_instruction_enum _instruct );
+	HAL_StatusTypeDef	BH1750_get_lux	( bh1750_struct * _h_bh1750, bh1750_instruction_enum _instruct, uint16_t * _result_lux_u16 );
 
 #endif /* BH1750_SM_H_INCLUDED */
 
