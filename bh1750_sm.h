@@ -85,7 +85,8 @@ typedef enum
 
 #endif /* BH1750_SM_H_INCLUDED */
 
-
+//	Measurement Time is typically 120ms.
+//	Wide range and High resolution. ( 1 - 65535 lx )
 //	EXAMPLE
 //	bh1750_struct h1_bh1750 = {
 //		.i2c = &hi2c1,
