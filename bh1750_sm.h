@@ -30,7 +30,7 @@
 	#include "stdio.h"
 	#include <string.h>
 
-	#include "bh1750_local_config.h"
+	#include "local_config.h"
 
 /*
 **************************************************************************
