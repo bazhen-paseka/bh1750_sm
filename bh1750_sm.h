@@ -29,8 +29,7 @@
 	#include "usart.h"
 	#include "stdio.h"
 	#include <string.h>
-
-	#include "bh1750_local_config.h"
+	#include "local_config.h"
 
 /*
 **************************************************************************
@@ -38,8 +37,7 @@
 **************************************************************************
 */
 
-typedef enum
-{
+typedef enum {
 	bh1750_power_down					=	0b00000000	,
 	bh1750_power_on						=	0b00000001	,
 	bh1750_power_reset					=	0b00000111	,
@@ -57,8 +55,7 @@ typedef enum
 **************************************************************************
 */
 
-	typedef struct
-	{
+	typedef struct {
 		I2C_HandleTypeDef 	*i2c;
 		uint8_t 			 device_i2c_address;
 	} bh1750_struct;
@@ -80,14 +77,17 @@ typedef enum
 *                              FUNCTION PROTOTYPES
 **************************************************************************
 */
-	HAL_StatusTypeDef	BH1750_init		( bh1750_struct * _h_bh1750, bh1750_instruction_enum _instruct );
-	HAL_StatusTypeDef	BH1750_get_lux	( bh1750_struct * _h_bh1750, bh1750_instruction_enum _instruct, uint16_t * _result_lux_u16 );
+	HAL_StatusTypeDef	Bh1750_Init		( bh1750_struct * _h_bh1750, bh1750_instruction_enum _instruct );
+	HAL_StatusTypeDef	Bh1750_GetLux	( bh1750_struct * _h_bh1750, bh1750_instruction_enum _instruct, uint16_t * _result_lux_u16 );
+	uint8_t 			Bh1750_LuxToPercent( uint16_t raw_value );
 
 #endif /* BH1750_SM_H_INCLUDED */
 
 //	Measurement Time is typically 120ms.
 //	Wide range and High resolution. ( 1 - 65535 lx )
+
 //	EXAMPLE
+//	#define BH1750_I2C_ADDR		0x23<<1
 //	bh1750_struct h1_bh1750 = {
 //		.i2c = &hi2c1,
 //		.device_i2c_address = BH1750_I2C_ADDR
@@ -97,21 +97,3 @@ typedef enum
 
 //	uint16_t lux_u16 = 0 ;
 //	HAL_StatusTypeDef op_res_td = BH1750_get_lux( &h1_bh1750, bh1750_one_time_h_resolutione, &lux_u16);
-
-
-
-/*
- * bh1750_local_config.h
- *
- *  Created on: 14-April-2020
- *      Author: Bazhen Levkovets
- */
-//	#ifndef LOCAL_CONFIG_BH1750_LOCAL_CONFIG_H_
-//	#define LOCAL_CONFIG_BH1750_LOCAL_CONFIG_H_
-/*
-**************************************************************************
-*								    DEFINES
-**************************************************************************
-*/
-//	#define BH1750_I2C_ADDR		0x23<<1
-//	#endif /* LOCAL_CONFIG_BH1750_LOCAL_CONFIG_H_ */
